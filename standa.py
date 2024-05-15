@@ -15,7 +15,8 @@ class Standa(Device):
         self.add_command("set_acceleration", self.set_acceleration)
         self.add_command("set_deacceleration", self.set_deacceleration)
         self.add_command("set_speed", self.set_speed)
-        self.add_command("set_speed", self.get_current_position)
+        self.add_command("get_current_position", self.get_current_position)
+        self.add_command("set_zero", self.set_zero)
 
     # Search for active devices
     def search_for_devices(self):
