@@ -1,6 +1,4 @@
 from device import Device
-import os
-import pathlib
 import libximc.highlevel as ximc
 
 class Standa(Device):
