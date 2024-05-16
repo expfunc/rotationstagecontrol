@@ -11,7 +11,7 @@ class Standa(Device):
         self.add_command("move_absolute", self.move_absolute)
         self.add_command("move_relative", self.move_relative)
         self.add_command("set_acceleration", self.set_acceleration)
-        self.add_command("set_deacceleration", self.set_deceleration)
+        self.add_command("set_deceleration", self.set_deceleration)
         self.add_command("set_speed", self.set_speed)
         self.add_command("get_current_position", self.get_current_position)
         self.add_command("set_zero", self.set_zero)
