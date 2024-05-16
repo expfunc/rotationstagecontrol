@@ -51,9 +51,9 @@ class Standa(Device):
         move_settings = self.axis.get_move_settings()
         move_settings.Accel *= acceleration
 
-    def set_deacceleration(self, deacceleration):
+    def set_deceleration(self, deceleration):
         move_settings = self.axis.get_move_settings()
-        move_settings.Decel *= deacceleration
+        move_settings.Decel *= deceleration
 
     def set_speed(self, speed):
         move_settings = self.axis.get_move_settings()
