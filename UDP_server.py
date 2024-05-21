@@ -1,11 +1,18 @@
 import socket
 
-UDP_IP = "0.0.0.0"  # Listen on all available interfaces
-UDP_PORT = 5005     # Port to listen on
+class UDPServer:
+    def __init__(self, ip_address, port):
+        self.ip_address = ip_address
+        self.port = port
+        self.socket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
 
-sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)  # Create UDP socket
-sock.bind((UDP_IP, UDP_PORT))  # Bind socket to IP and port
+    def start(self):
+        self.socket.bind((self.ip_address, self.port))
+        print(f"UDP server started on {self.ip_address}:{self.port}")
 
-while True:
-    data, addr = sock.recvfrom(1024)  # Receive up to 1024 bytes
-    print("received message:", data)
+    def receive_packet(self):
+        data, address = self.socket.recvfrom(1024)
+        return data.decode("utf-8"), address
+
+    def stop(self):
+        self.socket.close()
