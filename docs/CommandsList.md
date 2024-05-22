@@ -11,9 +11,9 @@
 | SET ZERO                 | Задать текущий угол поворота платформы равным 0° |  |  |
 | ABORT                    | Остановить движение платформы |  |  |
 ## Query Commands
-| Command description | Command | Answer format | Additional comments |
+| Command | Command description | Answer format | Additional comments |
 | --- | --- | --- | --- |
-| Запросить текущее значение угла положения платформы | GET POSITION | float, ° |  |
-| Запросить текущие параметры платформы | GET MOVE SETTINGS | {float, float, float} | {Speed, Acceleration, Deceleration} |
-| Запросить текущий статус | GET STATUS | {byte, string} | {status, additional data} |
-| Запросить информацию о платформе | INFO | {byte, string} | {device ID, additional data} |
+| GET POSITION | Запросить текущее значение угла положения платформы | float, ° |  |
+| GET MOVE SETTINGS | Запросить текущие параметры платформы | {float, float, float} | {Speed, Acceleration, Deceleration} |
+| GET STATUS | Запросить текущий статус | {byte, string} | {status, additional data} |
+| INFO | Запросить информацию о платформе | {byte, string} | {device ID, additional data} |
