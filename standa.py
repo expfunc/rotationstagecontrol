@@ -15,6 +15,9 @@ class Standa(Device):
         self.add_command("set_speed", self.set_speed)
         self.add_command("get_current_position", self.get_current_position)
         self.add_command("set_zero", self.set_zero)
+        # self.add_command("get_move_settings", self.get_move_settings)
+        self.add_command("get_status", self.get_status)
+        self.add_command("abort", self.abort)
 
     # Search for active devices
     def search_for_devices(self):
@@ -62,9 +65,15 @@ class Standa(Device):
     # Get current position
     def get_current_position(self):
         position = self.axis.get_position()
-
         return print("Current position:", position.Position)
+
+    def get_status(self):
+        status = self.axis.get_status()
+        return print("Current move settings:", status)
 
     # Set current position as zero
     def set_zero(self):
         self.axis.command_zero()
+
+    def abort(self):
+        self.axis.command_sstp()
