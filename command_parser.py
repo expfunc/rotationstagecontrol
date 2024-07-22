@@ -4,9 +4,8 @@ from utils import Utils
 
 
 class CommandParser:
-    def __init__(self, udp_server):
+    def __init__(self):
         self.standa_device = Standa()
-        self.udp_server = udp_server
         self.command_dict_ids = {0x0100: self.standa_device.connect,
                                  0x0101: self.standa_device.disconnect,
                                  0x0200: (self.standa_device.move_absolute, float),
