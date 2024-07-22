@@ -1,5 +1,5 @@
 import unittest
-from Utils import Utils
+from utils import Utils
 
 
 class TestUtils(unittest.TestCase):
