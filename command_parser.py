@@ -6,18 +6,18 @@ from utils import Utils
 class CommandParser:
     def __init__(self):
         self.standa_device = Standa()
-        self.command_dict_ids = {0x0100: self.standa_device.connect,
-                                 0x0101: self.standa_device.disconnect,
-                                 0x0200: (self.standa_device.move_absolute, float),
-                                 0x0201: (self.standa_device.move_relative, float),
-                                 0x0202: (self.standa_device.set_speed, float),
-                                 0x0203: (self.standa_device.set_acceleration, float),
-                                 0x0204: (self.standa_device.set_deceleration, float),
-                                 0x0205: self.standa_device.set_zero,
-                                 0x0206: self.standa_device.abort,
-                                 0x0300: self.standa_device.get_current_position,
-                                 # 0x0301: self.standa_device.get_move_settings,
-                                 0x0302: self.standa_device.get_status}
+        self.command_dict_ids = {b'0x0100': self.standa_device.connect,
+                                 b'0x0101': self.standa_device.disconnect,
+                                 b'0x0200': (self.standa_device.move_absolute, float),
+                                 b'0x0201': (self.standa_device.move_relative, float),
+                                 b'0x0202': (self.standa_device.set_speed, float),
+                                 b'0x0203': (self.standa_device.set_acceleration, float),
+                                 b'0x0204': (self.standa_device.set_deceleration, float),
+                                 b'0x0205': self.standa_device.set_zero,
+                                 b'0x0206': self.standa_device.abort,
+                                 b'0x0300': self.standa_device.get_current_position,
+                                 # b'0x0301': self.standa_device.get_move_settings,
+                                 b'0x0302': self.standa_device.get_status}
         self.devices_dict = {0x01: r'xi-emu:///C:/virtual_motor/virtual_motor_controller_1.bin'}
 
         self.command_format = "!HH"  # Example format: 2 bytes for command, 2 bytes for parameter
