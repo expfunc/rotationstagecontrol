@@ -1,11 +1,14 @@
 from device import Device
 import serial
+import serial.tools.list_ports
 
-class Positioner(Device):
+class CustomPositioner(Device):
     def __init__(self):
-        super().__init__("Positioner")
+        # super().__init__("CustomPositioner")
         self.serial_port = None
-        self.add_command("search_for_devices", self.search_for_devices)
+
+    def search_for_positioner_devices(self):
+        return [tuple(p) for p in list(serial.tools.list_ports.comports())]
 
     # Connection and disconnection
     def connect(self, device_uri):
