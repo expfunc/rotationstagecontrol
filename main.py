@@ -1,15 +1,15 @@
 import UDP_server
-from command_parser import CommandParser
-from command_builder import CommandBuilder
-from command_receiver import CommandReceiver
 import UDP_config
-from error_bubbling import ErrorBubbling
 from UDP_packet_handler import UDPPacketHandler
+from standa import Standa
+from custom_positioner import CustomPositioner
 
 
 class MainApp:
     def __init__(self, udp_config):
         self.udp_server = UDP_server.UDPServer(udp_config.ip_address, udp_config.port)
+        self.standa_device = Standa()
+        self.custom_positioner_device = CustomPositioner()
 
         # self.command_parser = command_parser.CommandParser()
 
@@ -18,8 +18,8 @@ class MainApp:
         while True:
             packet, address = self.udp_server.receive_packet()
             print(f"packet:{packet}, address:{address}")
-            if not UDPPacketHandler(self.udp_server).handle_packet(packet, address):
-                continue
+            UDPPacketHandler(self.udp_server).handle_packet(packet, address,
+                                                            self.standa_device, self.custom_positioner_device)
 
 
 config = UDP_config.UDPConfig("localhost", 5005)

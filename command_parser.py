@@ -1,5 +1,4 @@
 from utils import Utils
-from globals import *
 
 class CommandParser:
     def __init__(self):
