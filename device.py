@@ -1,5 +1,5 @@
 class Device:
-    def connect(self, device_uri):
+    def connect(self, *args):
         raise NotImplementedError("This method should be overridden in a subclass.")
 
     def disconnect(self):
