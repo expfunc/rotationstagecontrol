@@ -12,7 +12,10 @@ class UDPServer:
 
     def receive_packet(self):
         data, address = self.socket.recvfrom(1024)
-        return data.decode("utf-8"), address
+        return data.decode('utf-8'), address
+
+    def send_packet(self, data):
+        self.socket.sendto(data, (self.ip_address, self.port))
 
     def stop(self):
         self.socket.close()
