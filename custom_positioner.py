@@ -2,22 +2,23 @@ from device import Device
 import serial
 import serial.tools.list_ports
 
+
 class CustomPositioner(Device):
     def __init__(self):
         self.serial_port = None
 
-    def search_for_positioner_devices(self):
+    @staticmethod
+    def search_for_positioner_devices():
         return [tuple(p) for p in list(serial.tools.list_ports.comports())]
 
     # Connection and disconnection
-    def connect(self):
-        self.serial_port = serial.Serial('COM3', 9600, timeout=1)
+    def connect(self, com: str):
+        self.serial_port = serial.Serial(com, 9600, timeout=1)
 
     def disconnect(self):
         self.serial_port.close()
 
     def move_absolute(self, next_position):
-        print(next_position)
         message = f"move abs {next_position}"
         self.serial_port.write(message.encode())
 
@@ -35,7 +36,7 @@ class CustomPositioner(Device):
         self.serial_port.write(message.encode())
 
     def set_deceleration(self, deceleration):
-        message = f"set acc {deceleration}"
+        message = f"set dec {deceleration}"
         self.serial_port.write(message.encode())
 
     def set_zero(self):
