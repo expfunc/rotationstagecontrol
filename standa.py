@@ -1,24 +1,20 @@
 from device import Device
 import libximc.highlevel as ximc
 
+
 class Standa(Device):
     def __init__(self):
-        # super().__init__("Standa")
         self.axis = None
 
     # Search for active devices
-    def search_for_standa_devices(self):
+    @staticmethod
+    def search_for_standa_devices():
         devices = ximc.enumerate_devices(
             ximc.EnumerateFlags.ENUMERATE_NETWORK |
             ximc.EnumerateFlags.ENUMERATE_PROBE
         )
 
-        if len(devices) == 0:
-            return "Standa devices were not found"
-        else:
-            # Print real devices list
-            for device in devices:
-                return "  {}".format(device)
+        return devices
 
     # Connection and disconnection
     def connect(self, device_uri):
@@ -29,8 +25,8 @@ class Standa(Device):
         self.axis.close_device()
 
     # Motion commands
-    def move_absolute(self, next_position):
-        self.axis.command_move(next_position, 0)
+    def move_absolute(self, next_position: int):
+        self.axis.command_move(int(next_position), 0)
 
     def move_relative(self, relative_shift):
         self.axis.command_movr(relative_shift, 0)
@@ -49,7 +45,7 @@ class Standa(Device):
         move_settings.Speed *= speed
 
     # Get current position
-    def get_current_position(self):
+    def get_position(self):
         position = self.axis.get_position()
         return f'"Current position:", {position.Position}'
 
@@ -58,8 +54,13 @@ class Standa(Device):
         return f'"Current move settings:", {status}'
 
     # Set current position as zero
+    def info(self):
+        info = self.axis.get_device_information()
+        return f'"Device information": {info}'
+
     def set_zero(self):
         self.axis.command_zero()
 
     def abort(self):
         self.axis.command_sstp()
+

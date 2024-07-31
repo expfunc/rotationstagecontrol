@@ -1,9 +1,8 @@
-# from globals import *
 from device_manager import DeviceManager
 
 
 def convert(data: str):
-    return bytes(map(ord, data))
+    return data.encode('utf-8')
 
 
 class CommandBuilder:
@@ -16,10 +15,10 @@ class CommandBuilder:
         packet_type = packet[0]
         match packet_type:
             case '0x02':
-                self.udp_server.send_packet(convert(self.command.execute_command(*packet[2:])))
+                return convert(f'[Device Response] {self.command.execute_command(*packet[2:])}')
             case '0x03':
-                self.udp_server.send_packet(convert(f'{self.error_list}'))
+                return convert(f'[Error] {self.error_list}')
             case '0x08':
-                pass
-                # self.udp_server.send_packet(convert(f'Standa devices: {standa_device.search_for_standa_devices()}'
-                # f'\nPositioner devices: {positioner_device.search_for_positioner_devices()}'))
+                return convert("[Devices]\nStanda devices: {}, Custom Positioner devices: {}".format(*self.command.search_devices()))
+            case _:
+                raise ValueError(f"Unknown packet type: {packet_type}")

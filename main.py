@@ -11,8 +11,6 @@ class MainApp:
         self.standa_device = Standa()
         self.custom_positioner_device = CustomPositioner()
 
-        # self.command_parser = command_parser.CommandParser()
-
     def start(self):
         self.udp_server.start()
         while True:
