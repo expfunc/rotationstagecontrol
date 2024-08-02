@@ -6,7 +6,9 @@ class DeviceManager:
     def __init__(self, standa_device: Standa = Standa, custom_positioner_device: CustomPositioner = CustomPositioner):
         self.standa_device = standa_device
         self.custom_positioner_device = custom_positioner_device
-        self.device_map = {'0x01': self.standa_device, 'STM32F103C8T6 build version 1.2': self.custom_positioner_device}
+        self.device_map = {'0x01': (self.standa_device, r"xi-emu:///C:\virtual_motor\virtual_motor_controller_1.bin"),
+                           'STM32F103C8T6_build_version_1.2': (self.custom_positioner_device, 'COM3'),
+                           }
 
     def search_devices(self):
         self.device_map.clear()
@@ -16,9 +18,9 @@ class DeviceManager:
         if standa_ids:
             for id in standa_ids:
                 id = id[id.rfind('/') + 1:]
-                self.device_map[id] = self.standa_device
+                self.device_map[id] = (self.standa_device, fr'xi-com:///dev/ximc/{id}')
         else:
-            self.device_map['0x01'] = self.standa_device
+            self.device_map['0x01'] = (self.standa_device, r"xi-emu:///C:\virtual_motor\virtual_motor_controller_1.bin")
 
         # search Custom Positioner
         custom_positioner_ids = []
@@ -26,17 +28,17 @@ class DeviceManager:
             com = com[0]
             temp_custom_positioner = CustomPositioner()
             temp_custom_positioner.connect(com)
-            custom_positioner_ids.append(temp_custom_positioner.info().strip().replace('\n', ' '))
+            custom_positioner_ids.append((temp_custom_positioner.info().strip().replace('\n', ' ').replace(' ', '_'), com))
             temp_custom_positioner.disconnect()
 
         if custom_positioner_ids:
             for id in custom_positioner_ids:
-                self.device_map[id] = self.custom_positioner_device
+                self.device_map[id[0]] = (self.custom_positioner_device, id[1])
 
         return standa_ids, custom_positioner_ids
 
     def execute_command(self, device_id: str, command_id: str, *param: float):
-        device_class = self.device_map.get(device_id)
+        device_class = self.device_map.get(device_id)[0]
         if not device_class:
             raise ValueError(f"Unknown device ID: {device_id}")
 
@@ -57,18 +59,13 @@ class DeviceManager:
         }
 
         command_func = command_map.get(command_id)
+
         if command_id == '0x0100':
-            if isinstance(device_class, Standa):
-                if device_id == '0x01':
-                    param = (r"xi-emu:///C:\virtual_motor\virtual_motor_controller_1.bin", )
-                else:
-                    param = (r'xi-com:///dev/ximc/' + device_id, )
-            elif isinstance(device_class, CustomPositioner):
-                param = (device_id,)
+            param = (self.device_map[device_id][1], )
 
         if isinstance(command_func, tuple):
             if param:
-                param = (command_func[1](param[0]), )
+                param = (command_func[1](param[0]),)
             command_func = command_func[0]
 
         if not command_func:
