@@ -15,13 +15,11 @@ class UDPPacketHandler:
         # For now, just print the packet
         try:
             parsed_command = CommandParser().parse_command(packet)
-            if not parsed_command:
-                return None
             print(f"Received packet from {address}: {packet}")
             if parsed_command[0] == '0x01':
                 CommandReceiver(standa_device, custom_positioner_device).receive_command(parsed_command)
             else:
-                UDPServer(address[0], 5005).send_packet(
+                UDPServer("192.168.108.242", 5005).send_packet(
                     CommandBuilder(self.udp_server, self.error_bubbling.get_error_list(),
                                    standa_device, custom_positioner_device).built_command(parsed_command)
                 )
