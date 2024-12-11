@@ -46,7 +46,7 @@ class MainApp:
 
 
 # Main execution
-time.sleep(5)
+# time.sleep(5)
 try:
     # config = UDP_config.UDPConfig("raspberrypi.local", 5005)
     config = UDP_config.UDPConfig("localhost", 5005)
