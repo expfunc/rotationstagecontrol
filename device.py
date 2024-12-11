@@ -1,16 +1,43 @@
 class Device:
-    def __init__(self, id):
-        self.id = id
-        self.commands = {}
+    def connect(self, *args):
+        raise NotImplementedError("This method should be overridden in a subclass.")
 
-    def add_command(self, name, func):
-        self.commands[name] = func
+    def disconnect(self):
+        raise NotImplementedError("This method should be overridden in a subclass.")
 
-    def execute_command(self, name, *args, **kwargs):
-        if name in self.commands:
-            return self.commands[name](*args, **kwargs)
-        else:
-            raise ValueError(f"Command '{name}' not found for device {self.id}")
+    # Motion commands
+    def move_absolute(self, next_position):
+        raise NotImplementedError("This method should be overridden in a subclass.")
 
-    def list_commands(self):
-        return list(self.commands.keys())
+    def move_relative(self, relative_shift):
+        raise NotImplementedError("This method should be overridden in a subclass.")
+
+    # Move settings
+    def set_acceleration(self, acceleration):
+        raise NotImplementedError("This method should be overridden in a subclass.")
+
+    def set_deceleration(self, deceleration):
+        raise NotImplementedError("This method should be overridden in a subclass.")
+
+    def set_speed(self, speed):
+        raise NotImplementedError("This method should be overridden in a subclass.")
+
+    # Get current position
+    def get_position(self):
+        raise NotImplementedError("This method should be overridden in a subclass.")
+
+    def get_move_settings(self):
+        raise NotImplementedError("This method should be overridden in a subclass.")
+
+    def get_status(self):
+        raise NotImplementedError("This method should be overridden in a subclass.")
+
+    # Set current position as zero
+    def set_zero(self):
+        raise NotImplementedError("This method should be overridden in a subclass.")
+
+    def abort(self):
+        raise NotImplementedError("This method should be overridden in a subclass.")
+
+    def info(self):
+        raise NotImplementedError("This method should be overridden in a subclass.")
