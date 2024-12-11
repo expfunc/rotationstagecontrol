@@ -48,7 +48,8 @@ class MainApp:
 # Main execution
 time.sleep(5)
 try:
-    config = UDP_config.UDPConfig("raspberrypi.local", 5005)
+    # config = UDP_config.UDPConfig("raspberrypi.local", 5005)
+    config = UDP_config.UDPConfig("localhost", 5005)
     server = MainApp(config)
     server.start()
 except Exception as e:
