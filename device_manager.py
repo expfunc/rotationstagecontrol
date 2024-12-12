@@ -45,14 +45,20 @@ class DeviceManager:
             self.device_map['0x01'] = (self.standa_device, r"xi-emu:///home/expfunc/Downloads/rotationstagecontrol/virtual_motor_controller_1.bin")
 
         # search Custom Positioner
+        expected_first_word = "MPSU-Rotator." # Expected first word from the positioner answer on the "info" command
         custom_positioner_ids = []
         for com in CustomPositioner.search_for_positioner_devices():
             com = com[0]
             if com[com.rfind('/') + 1:] not in self.device_map:
-                temp_custom_positioner = CustomPositioner()
                 try:
+                    temp_custom_positioner = CustomPositioner()
                     temp_custom_positioner.connect(com)
-                    custom_positioner_ids.append((temp_custom_positioner.info().strip().replace('\n', ' ').replace(' ', '_'), com))
+                    temp_custom_positioner.DropMessage() # First message drop. Cause for some reason, it appends data from some buffer, that distorts the first command.
+                    custom_positioner_answer = temp_custom_positioner.info().strip().split()
+                    if len(custom_positioner_answer) != 0:
+                        if custom_positioner_answer[0] == expected_first_word:
+                            device_id = custom_positioner_answer[3]
+                            custom_positioner_ids.append((device_id, com))
                     temp_custom_positioner.disconnect()
                 except Exception as e:
                     pass

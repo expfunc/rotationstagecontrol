@@ -26,6 +26,7 @@ class CustomPositioner(Device):
         Returns:
             list: A list of tuples with information about available serial ports.
         """
+
         return [tuple(p) for p in list(serial.tools.list_ports.comports())]
 
     def connect(self, com: str):
@@ -160,6 +161,14 @@ class CustomPositioner(Device):
             str: The device information.
         """
         self.serial_port.reset_output_buffer()
-        message = f"info"
+        message = f"info\r\n"
         self.serial_port.write(message.encode())
         return ''.join(map(bytes.decode, self.serial_port.readlines()[-2:]))
+
+    def DropMessage(self):
+        """
+        Drops single message.
+        """
+        message = f"test\r\n"
+        self.serial_port.write(message.encode())
+        print(self.serial_port.readlines())
