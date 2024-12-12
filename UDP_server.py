@@ -47,6 +47,7 @@ class UDPServer:
         Args:
             data (str): The data to send.
         """
+        print(f"Send packet to {self.ip_address}, {self.port}: {data}")
         self.socket.sendto(data, (self.ip_address, self.port))
 
     def stop(self):
