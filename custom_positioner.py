@@ -52,7 +52,7 @@ class CustomPositioner(Device):
             next_position (float, °): The target position to move to.
         """
         next_position = next_position[0]
-        message = f"move abs {next_position}"
+        message = f"move abs {next_position}\r\n"
         self.serial_port.write(message.encode())
 
     def move_relative(self, *next_position):
@@ -63,7 +63,18 @@ class CustomPositioner(Device):
             next_position (float, °): The relative distance to move.
         """
         next_position = next_position[0]
-        message = f"move rel {next_position}"
+        message = f"move rel {next_position}\r\n"
+        self.serial_port.write(message.encode())
+
+    def move_absolute_unwrapped(self, *next_position):
+        """
+        Moves the custom positioner to an absolute unwrapped position.
+
+        Args:
+            next_position (float, °): The target unwrapped position to move to.
+        """
+        next_position = next_position[0]
+        message = f"move unw {next_position}\r\n"
         self.serial_port.write(message.encode())
 
     def set_speed(self, *speed):
@@ -74,7 +85,7 @@ class CustomPositioner(Device):
             speed (float, °/s): The speed to set.
         """
         speed = speed[0]
-        message = f"set speed {speed}"
+        message = f"set speed {speed}\r\n"
         self.serial_port.write(message.encode())
 
     def set_acceleration(self, *acceleration):
@@ -85,7 +96,7 @@ class CustomPositioner(Device):
             acceleration (float, °/s²): The acceleration to set.
         """
         acceleration = acceleration[0]
-        message = f"set acc {acceleration}"
+        message = f"set acc {acceleration}\r\n"
         self.serial_port.write(message.encode())
         self.serial_port.flush()
 
@@ -97,21 +108,44 @@ class CustomPositioner(Device):
             deceleration (float, °/s²): The deceleration to set.
         """
         deceleration = deceleration[0]
-        message = f"set dec {deceleration}"
+        message = f"set dec {deceleration}\r\n"
         self.serial_port.write(message.encode())
 
     def set_zero(self):
         """
         Sets the current position of the custom positioner as zero.
         """
-        message = f"set zero"
+        message = f"set angle {0}\r\n"
+        self.serial_port.write(message.encode())
+
+    def set_current_angle(self, *angle):
+        """
+        Sets the current position of the custom positioner to a specific wrapped angle.
+        """
+        angle = angle[0]
+        message = f"set angle {angle}\r\n"
+        self.serial_port.write(message.encode())
+
+    def set_current_angle_unwrapped(self, *unwrapped_angle):
+        """
+        Sets the current position of the custom positioner as a specific unwrapped angle.
+        """
+        unwrapped_angle = unwrapped_angle[0]
+        message = f"set unwrapped {unwrapped_angle}\r\n"
         self.serial_port.write(message.encode())
 
     def abort(self):
         """
         Aborts any ongoing movement of the custom positioner.
         """
-        message = f"abort"
+        message = f"abort\r\n"
+        self.serial_port.write(message.encode())
+
+    def stop(self):
+        """
+        Decelerate and stop current positioner movement.
+        """
+        message = f"stop\r\n"
         self.serial_port.write(message.encode())
 
     def get_position(self):
@@ -122,7 +156,20 @@ class CustomPositioner(Device):
             str, °: The current position.
         """
         self.serial_port.reset_output_buffer()
-        message = f"get angle"
+        message = f"get angle\r\n"
+        self.serial_port.write(message.encode())
+        position = self.serial_port.readline().split()[-1].decode()
+        return position
+
+    def get_position_unwrapped(self):
+        """
+        Gets the current unwrapped position of the custom positioner.
+
+        Returns:
+            str, °: The current position.
+        """
+        self.serial_port.reset_output_buffer()
+        message = f"get unwrapped\r\n"
         self.serial_port.write(message.encode())
         position = self.serial_port.readline().split()[-1].decode()
         return position
@@ -135,7 +182,7 @@ class CustomPositioner(Device):
             tuple: The current speed, acceleration, and deceleration settings (°/s, °/s², °/s²).
         """
         self.serial_port.reset_output_buffer()
-        messages = (f"get speed", f"get acc", f"get dec")
+        messages = (f"get speed\r\n", f"get acc\r\n", f"get dec\r\n")
         for message in messages:
             self.serial_port.write(message.encode())
         move_settings = tuple(map(lambda x: float(x.decode().strip().split()[-1]), self.serial_port.readlines()[-3:]))
@@ -149,7 +196,7 @@ class CustomPositioner(Device):
             str: The status of the device.
         """
         self.serial_port.reset_output_buffer()
-        message = f"status"
+        message = f"status\r\n"
         self.serial_port.write(message.encode())
         return ''.join(map(bytes.decode, self.serial_port.readlines()))
 

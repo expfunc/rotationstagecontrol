@@ -96,15 +96,20 @@ class DeviceManager:
             "0x0101": device_class.disconnect,
             "0x0200": (device_class.move_absolute, float),
             "0x0201": (device_class.move_relative, float),
-            "0x0202": (device_class.set_speed, float),
-            "0x0203": (device_class.set_acceleration, float),
-            "0x0204": (device_class.set_deceleration, float),
-            "0x0205": device_class.set_zero,
-            "0x0206": device_class.abort,
+            "0x0202": (device_class.move_absolute_unwrapped, float),
+            "0x0203": (device_class.set_speed, float),
+            "0x0204": (device_class.set_acceleration, float),
+            "0x0205": (device_class.set_deceleration, float),
+            "0x0206": (device_class.set_current_angle, float),
+            "0x0207": (device_class.set_current_angle_unwrapped, float),
+            "0x0208": device_class.set_zero,
+            "0x0209": device_class.abort,
+            "0x0210": device_class.stop,
             "0x0300": device_class.get_position,
-            "0x0301": device_class.get_move_settings,
-            "0x0302": device_class.get_status,
-            "0x0303": device_class.info
+            "0x0301": device_class.get_position_unwrapped,
+            "0x0302": device_class.get_move_settings,
+            "0x0303": device_class.get_status,
+            "0x0304": device_class.info
         }
 
         command_func = command_map.get(command_id)

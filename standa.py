@@ -70,6 +70,9 @@ class Standa(Device):
         relative_shift = relative_shift[0]
         self.axis.command_movr_calb(int(relative_shift))
 
+    def move_absolute_unwrapped(self, *next_position):
+        raise NotImplementedError("This command is not currently implemented.")
+
     def set_speed(self, *speed):
         """
         Sets the movement speed of the Standa device.
@@ -116,6 +119,9 @@ class Standa(Device):
         position = self.axis.get_position_calb()
         return position.Position
 
+    def get_position_unwrapped(self):
+        raise NotImplementedError("This command is not currently implemented.")
+
     def get_move_settings(self):
         """
         Gets the current movement settings (speed, acceleration, deceleration).
@@ -152,8 +158,17 @@ class Standa(Device):
         """
         self.axis.command_zero()
 
+    def set_current_angle(self):
+        raise NotImplementedError("This command is not currently implemented.")
+
+    def set_current_angle_unwrapped(self):
+        raise NotImplementedError("This command is not currently implemented.")
+
     def abort(self):
         """
         Aborts any ongoing movement of the Standa device.
         """
         self.axis.command_sstp()
+
+    def stop(self):
+        raise NotImplementedError("This command is not currently implemented.")
