@@ -40,12 +40,12 @@ class UDPPacketHandler:
             if parsed_command[0] == '0x01':
                 CommandReceiver(standa_device, custom_positioner_device, device_map).receive_command(parsed_command)
             else: 
-                UDPServer(address[0], 5005).send_packet(
+                UDPServer(address[0], 59000).send_packet(
                     CommandBuilder(self.udp_server,
                                    standa_device, custom_positioner_device, device_map).built_command(parsed_command)
                                    )
         except Exception as e:
-            UDPServer(address[0], 5005).send_packet(
+            UDPServer(address[0], 59000).send_packet(
                     CommandBuilder(self.udp_server,
                                    standa_device, custom_positioner_device, device_map, error=str(e)).built_command(['0x03'])
                                    )
